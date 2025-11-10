@@ -1,0 +1,162 @@
+[
+  {
+    "nim": "1020200001",
+    "name": "Andi Pratama",
+    "email": "andi.pratama@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2020,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020200002",
+    "name": "Budi Santoso",
+    "email": "budi.santoso@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2020,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020200003",
+    "name": "Citra Dewi",
+    "email": "citra.dewi@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2020,
+    "status": "NOT_ACTIVE"
+  },
+  {
+    "nim": "1020210001",
+    "name": "Dian Permata",
+    "email": "dian.permata@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2021,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020210002",
+    "name": "Eka Saputra",
+    "email": "eka.saputra@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2021,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020220001",
+    "name": "Fajar Nugroho",
+    "email": "fajar.nugroho@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2022,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020220002",
+    "name": "Gita Kusuma",
+    "email": "gita.kusuma@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2022,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020230001",
+    "name": "Hendra Wijaya",
+    "email": "hendra.wijaya@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2023,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1020230002",
+    "name": "Indah Lestari",
+    "email": "indah.lestari@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2023,
+    "status": "DROPOUT"
+  },
+  {
+    "nim": "1020240001",
+    "name": "Joko Purnama",
+    "email": "joko.purnama@student.ac.id",
+    "major": "Sistem Informasi",
+    "batch": 2024,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120200001",
+    "name": "Kartika Sari",
+    "email": "kartika.sari@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2020,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120200002",
+    "name": "Lina Rahayu",
+    "email": "lina.rahayu@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2020,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120200003",
+    "name": "Made Hidayat",
+    "email": "made.hidayat@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2020,
+    "status": "NOT_ACTIVE"
+  },
+  {
+    "nim": "1120210001",
+    "name": "Nur Syahputra",
+    "email": "nur.syahputra@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2021,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120210002",
+    "name": "Oktaviani Ramadhan",
+    "email": "oktaviani.ramadhan@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2021,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120220001",
+    "name": "Putra Mahendra",
+    "email": "putra.mahendra@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2022,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120220002",
+    "name": "Qori Pradana",
+    "email": "qori.pradana@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2022,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120230001",
+    "name": "Rina Saputri",
+    "email": "rina.saputri@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2023,
+    "status": "ACTIVE"
+  },
+  {
+    "nim": "1120230002",
+    "name": "Sari Pangestu",
+    "email": "sari.pangestu@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2023,
+    "status": "DROPOUT"
+  },
+  {
+    "nim": "1120240001",
+    "name": "Tono Firmansyah",
+    "email": "tono.firmansyah@student.ac.id",
+    "major": "Teknologi Informasi",
+    "batch": 2024,
+    "status": "ACTIVE"
+  }
+]

@@ -42,11 +42,52 @@ public class StudentServiceImpl implements StudentService {
         if (student.getName() == null || student.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Student name cannot be empty");
         }
+        if (student.getMajor() == null || student.getMajor().trim().isEmpty()) {
+            throw new IllegalArgumentException("Student major cannot be empty");
+        }
+        if (student.getBatch() == null) {
+            throw new IllegalArgumentException("Student batch cannot be empty");
+        }
+
+        // Auto-generate NIM if not provided
         if (student.getNim() == null || student.getNim().trim().isEmpty()) {
-            throw new IllegalArgumentException("Student NIM cannot be empty");
+            student.setNim(generateNim(student.getMajor(), student.getBatch()));
         }
 
         return studentRepository.save(student);
+    }
+
+    /**
+     * Generate NIM with format: AABBBBCCCC
+     * AA = major code (10=SI, 11=TI)
+     * BBBB = batch year
+     * CCCC = sequence number
+     */
+    private String generateNim(String major, Integer batch) {
+        // Determine major code
+        String majorCode = "Sistem Informasi".equals(major) ? "10" : "11";
+
+        // Find the highest sequence number for this major and batch
+        List<Student> existingStudents = studentRepository.findAll();
+        int maxSequence = 0;
+
+        String prefix = majorCode + batch;
+        for (Student s : existingStudents) {
+            if (s.getNim() != null && s.getNim().startsWith(prefix)) {
+                try {
+                    int sequence = Integer.parseInt(s.getNim().substring(6));
+                    if (sequence > maxSequence) {
+                        maxSequence = sequence;
+                    }
+                } catch (Exception e) {
+                    // Skip invalid NIM format
+                }
+            }
+        }
+
+        // Generate new NIM with next sequence number
+        int newSequence = maxSequence + 1;
+        return String.format("%s%04d", prefix, newSequence);
     }
 
     @Override

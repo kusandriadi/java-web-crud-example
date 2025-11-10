@@ -1,0 +1,152 @@
+[
+  {
+    "code": "SI001",
+    "name": "Basis Data",
+    "sks": 3
+  },
+  {
+    "code": "SI002",
+    "name": "Sistem Informasi Manajemen",
+    "sks": 3
+  },
+  {
+    "code": "SI003",
+    "name": "Analisis dan Desain Sistem",
+    "sks": 4
+  },
+  {
+    "code": "SI004",
+    "name": "Pemrograman Web",
+    "sks": 3
+  },
+  {
+    "code": "SI005",
+    "name": "Jaringan Komputer",
+    "sks": 3
+  },
+  {
+    "code": "SI006",
+    "name": "Sistem Operasi",
+    "sks": 3
+  },
+  {
+    "code": "SI007",
+    "name": "Struktur Data",
+    "sks": 4
+  },
+  {
+    "code": "SI008",
+    "name": "Algoritma Pemrograman",
+    "sks": 4
+  },
+  {
+    "code": "SI009",
+    "name": "Manajemen Proyek TI",
+    "sks": 3
+  },
+  {
+    "code": "SI010",
+    "name": "Keamanan Informasi",
+    "sks": 3
+  },
+  {
+    "code": "SI011",
+    "name": "Data Mining",
+    "sks": 3
+  },
+  {
+    "code": "SI012",
+    "name": "Business Intelligence",
+    "sks": 3
+  },
+  {
+    "code": "SI013",
+    "name": "E-Business",
+    "sks": 3
+  },
+  {
+    "code": "SI014",
+    "name": "Enterprise Resource Planning",
+    "sks": 4
+  },
+  {
+    "code": "SI015",
+    "name": "Audit Sistem Informasi",
+    "sks": 3
+  },
+  {
+    "code": "TI001",
+    "name": "Pemrograman Java",
+    "sks": 4
+  },
+  {
+    "code": "TI002",
+    "name": "Pemrograman Python",
+    "sks": 4
+  },
+  {
+    "code": "TI003",
+    "name": "Pemrograman C++",
+    "sks": 4
+  },
+  {
+    "code": "TI004",
+    "name": "Pemrograman Mobile",
+    "sks": 3
+  },
+  {
+    "code": "TI005",
+    "name": "Cloud Computing",
+    "sks": 3
+  },
+  {
+    "code": "TI006",
+    "name": "DevOps",
+    "sks": 3
+  },
+  {
+    "code": "TI007",
+    "name": "Arsitektur Komputer",
+    "sks": 3
+  },
+  {
+    "code": "TI008",
+    "name": "Internet of Things",
+    "sks": 3
+  },
+  {
+    "code": "TI009",
+    "name": "Blockchain Technology",
+    "sks": 3
+  },
+  {
+    "code": "TI010",
+    "name": "Machine Learning",
+    "sks": 4
+  },
+  {
+    "code": "TI011",
+    "name": "Deep Learning",
+    "sks": 4
+  },
+  {
+    "code": "TI012",
+    "name": "Computer Vision",
+    "sks": 3
+  },
+  {
+    "code": "TI013",
+    "name": "Natural Language Processing",
+    "sks": 3
+  },
+  {
+    "code": "TI014",
+    "name": "Big Data Analytics",
+    "sks": 4
+  },
+  {
+    "code": "TI015",
+    "name": "Cyber Security",
+    "sks": 3
+  }
+]

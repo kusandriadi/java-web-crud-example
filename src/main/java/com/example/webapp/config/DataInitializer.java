@@ -1,23 +1,29 @@
 package com.example.webapp.config;
 
+import com.example.webapp.model.ClassRoom;
 import com.example.webapp.model.Student;
-import com.example.webapp.model.StudentStatus;
 import com.example.webapp.model.Subject;
+import com.example.webapp.service.ClassRoomService;
 import com.example.webapp.service.StudentService;
 import com.example.webapp.service.SubjectService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Data initializer component
- * Runs on application startup to populate initial data
+ * Runs on application startup to populate initial data from JSON files
  * Uses Service layer instead of direct Repository access
  */
+@Slf4j
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -27,149 +33,147 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private SubjectService subjectService;
 
-    private final Random random = new Random();
+    @Autowired
+    private ClassRoomService classRoomService;
 
-    // Indonesian first names
-    private final String[] firstNames = {
-        "Andi", "Budi", "Citra", "Dewi", "Eka", "Fajar", "Gita", "Hadi", "Indah", "Joko",
-        "Kartika", "Lina", "Made", "Nur", "Oktaviani", "Putra", "Qori", "Rina", "Sari", "Tono",
-        "Umar", "Vina", "Wati", "Yanto", "Zahra", "Agus", "Bambang", "Cahya", "Dian", "Endah",
-        "Fitri", "Gilang", "Hendra", "Intan", "Jaka", "Kurnia", "Laras", "Mega", "Nanda", "Omar"
-    };
-
-    // Indonesian last names
-    private final String[] lastNames = {
-        "Pratama", "Santoso", "Wijaya", "Kusuma", "Nugroho", "Permata", "Saputra", "Wibowo", "Putra", "Utama",
-        "Setiawan", "Rahayu", "Hidayat", "Syahputra", "Ramadhan", "Purnama", "Mahendra", "Pradana", "Saputri", "Lestari",
-        "Pangestu", "Firmansyah", "Kurniawan", "Hartono", "Susanto", "Mulyadi", "Gunawan", "Wahyudi", "Suryadi", "Hakim"
-    };
-
-    // Subject names for Sistem Informasi
-    private final String[] siSubjects = {
-        "Basis Data", "Sistem Informasi Manajemen", "Analisis dan Desain Sistem", "Pemrograman Web",
-        "Jaringan Komputer", "Sistem Operasi", "Struktur Data", "Algoritma Pemrograman",
-        "Manajemen Proyek TI", "Keamanan Informasi", "Data Mining", "Business Intelligence",
-        "E-Business", "Enterprise Resource Planning", "Customer Relationship Management",
-        "Audit Sistem Informasi", "Tata Kelola TI", "Sistem Pendukung Keputusan", "Rekayasa Perangkat Lunak",
-        "Interaksi Manusia dan Komputer", "Pemrograman Berorientasi Objek", "Kecerdasan Buatan"
-    };
-
-    // Subject names for Teknologi Informasi
-    private final String[] tiSubjects = {
-        "Pemrograman Java", "Pemrograman Python", "Pemrograman C++", "Pemrograman Mobile",
-        "Cloud Computing", "DevOps", "Arsitektur Komputer", "Sistem Embedded",
-        "Internet of Things", "Blockchain Technology", "Machine Learning", "Deep Learning",
-        "Computer Vision", "Natural Language Processing", "Big Data Analytics",
-        "Forensik Digital", "Cyber Security", "Ethical Hacking", "Network Security",
-        "Software Testing", "Agile Development", "Version Control System"
-    };
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void run(String... args) {
-        // Only initialize if collections are empty
-        if (studentService.countStudents() == 0) {
-            initializeStudents();
-        }
+        try {
+            log.info("Starting data initialization...");
 
-        if (subjectService.countSubjects() == 0) {
-            initializeSubjects();
-        }
-    }
-
-    private void initializeStudents() {
-        List<Student> students = new ArrayList<>();
-        int[] batches = {2020, 2021, 2022, 2023, 2024};
-        String[] majors = {"Sistem Informasi", "Teknologi Informasi"};
-        StudentStatus[] statuses = StudentStatus.values();
-
-        // Counter for NIM generation per major and batch
-        int[][] counters = new int[2][5]; // [major][batch]
-
-        for (int i = 0; i < 100; i++) {
-            // Select major and batch
-            int majorIndex = i < 50 ? 0 : 1;  // First 50 SI, next 50 TI
-            String major = majors[majorIndex];
-            int batchIndex = i % 5;
-            int batch = batches[batchIndex];
-
-            // Generate NIM: AABBBBCCCC
-            String majorCode = majorIndex == 0 ? "10" : "11";
-            counters[majorIndex][batchIndex]++;
-            String orderNumber = String.format("%04d", counters[majorIndex][batchIndex]);
-            String nim = majorCode + batch + orderNumber;
-
-            // Generate random name
-            String firstName = firstNames[random.nextInt(firstNames.length)];
-            String lastName = lastNames[random.nextInt(lastNames.length)];
-            String fullName = firstName + " " + lastName;
-
-            // Generate email
-            String email = firstName.toLowerCase() + "." + lastName.toLowerCase() + "@student.ac.id";
-
-            // Assign status based on distribution
-            StudentStatus status;
-            if (i < 70) {
-                status = StudentStatus.ACTIVE;  // 70% active
-            } else if (i < 90) {
-                status = StudentStatus.NOT_ACTIVE;  // 20% not active
+            // Only initialize if collections are empty
+            if (studentService.countStudents() == 0) {
+                initializeStudents();
             } else {
-                status = StudentStatus.DROPOUT;  // 10% dropout
+                log.info("Students collection already has data, skipping initialization");
             }
 
-            Student student = new Student(null, nim, fullName, email, major, batch, status);
-            students.add(student);
-        }
+            if (subjectService.countSubjects() == 0) {
+                initializeSubjects();
+            } else {
+                log.info("Subjects collection already has data, skipping initialization");
+            }
 
-        // Use service layer to save students
-        for (Student student : students) {
-            studentService.createStudent(student);
+            if (classRoomService.countClasses() == 0) {
+                initializeClasses();
+            } else {
+                log.info("Classes collection already has data, skipping initialization");
+            }
+
+            log.info("Data initialization completed");
+        } catch (Exception e) {
+            log.error("Error initializing data: {}", e.getMessage(), e);
         }
-        System.out.println("✅ Initialized 100 students");
     }
 
+    /**
+     * Load students from JSON file
+     */
+    private void initializeStudents() {
+        try {
+            log.info("Loading students from students.json...");
+
+            // Read JSON file from resources/data folder
+            ClassPathResource resource = new ClassPathResource("data/students.json");
+            InputStream inputStream = resource.getInputStream();
+
+            // Parse JSON to List of Student objects
+            List<Student> students = objectMapper.readValue(
+                inputStream,
+                new TypeReference<List<Student>>() {}
+            );
+
+            // Save all students using service layer
+            for (Student student : students) {
+                studentService.createStudent(student);
+            }
+
+            log.info("Successfully initialized {} students from students.json", students.size());
+
+        } catch (Exception e) {
+            log.error("Failed to load students from JSON: {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Load subjects from JSON file
+     */
     private void initializeSubjects() {
-        List<Subject> subjects = new ArrayList<>();
+        try {
+            log.info("Loading subjects from subjects.json...");
 
-        // Generate SI subjects (50 subjects)
-        for (int i = 0; i < siSubjects.length && subjects.size() < 50; i++) {
-            String code = "SI" + String.format("%03d", i + 1);
-            int sks = (i % 3) + 2;  // SKS between 2-4
-            Subject subject = new Subject(null, code, siSubjects[i], sks);
-            subjects.add(subject);
-        }
+            // Read JSON file from resources/data folder
+            ClassPathResource resource = new ClassPathResource("data/subjects.json");
+            InputStream inputStream = resource.getInputStream();
 
-        // Add more SI subjects if needed
-        int counter = siSubjects.length;
-        while (subjects.size() < 50) {
-            String code = "SI" + String.format("%03d", counter + 1);
-            int sks = (counter % 3) + 2;
-            Subject subject = new Subject(null, code, siSubjects[counter % siSubjects.length] + " " + (counter / siSubjects.length + 1), sks);
-            subjects.add(subject);
-            counter++;
-        }
+            // Parse JSON to List of Subject objects
+            List<Subject> subjects = objectMapper.readValue(
+                inputStream,
+                new TypeReference<List<Subject>>() {}
+            );
 
-        // Generate TI subjects (50 subjects)
-        for (int i = 0; i < tiSubjects.length && subjects.size() < 100; i++) {
-            String code = "TI" + String.format("%03d", i + 1);
-            int sks = (i % 3) + 2;  // SKS between 2-4
-            Subject subject = new Subject(null, code, tiSubjects[i], sks);
-            subjects.add(subject);
-        }
+            // Save all subjects using service layer
+            for (Subject subject : subjects) {
+                subjectService.createSubject(subject);
+            }
 
-        // Add more TI subjects if needed
-        counter = tiSubjects.length;
-        while (subjects.size() < 100) {
-            String code = "TI" + String.format("%03d", counter + 1);
-            int sks = (counter % 3) + 2;
-            Subject subject = new Subject(null, code, tiSubjects[counter % tiSubjects.length] + " " + (counter / tiSubjects.length + 1), sks);
-            subjects.add(subject);
-            counter++;
-        }
+            log.info("Successfully initialized {} subjects from subjects.json", subjects.size());
 
-        // Use service layer to save subjects
-        for (Subject subject : subjects) {
-            subjectService.createSubject(subject);
+        } catch (Exception e) {
+            log.error("Failed to load subjects from JSON: {}", e.getMessage(), e);
         }
-        System.out.println("✅ Initialized 100 subjects");
+    }
+
+    /**
+     * Load classes from JSON file
+     */
+    private void initializeClasses() {
+        try {
+            log.info("Loading classes from classes.json...");
+
+            // Read JSON file from resources/data folder
+            ClassPathResource resource = new ClassPathResource("data/classes.json");
+            InputStream inputStream = resource.getInputStream();
+
+            // Parse JSON to List of ClassRoom objects
+            List<ClassRoom> classes = objectMapper.readValue(
+                inputStream,
+                new TypeReference<List<ClassRoom>>() {}
+            );
+
+            // Get all subjects to match subject names to IDs
+            List<Subject> allSubjects = subjectService.getAllSubjects();
+
+            // Save all classes using service layer
+            for (ClassRoom classRoom : classes) {
+                // Try to find matching subject by name
+                allSubjects.stream()
+                    .filter(s -> s.getName().equals(classRoom.getSubjectName()))
+                    .findFirst()
+                    .ifPresent(subject -> classRoom.setSubjectId(subject.getId()));
+
+                // Convert student NIMs to student IDs
+                if (classRoom.getStudentNims() != null && !classRoom.getStudentNims().isEmpty()) {
+                    List<String> studentIds = new ArrayList<>();
+                    for (String nim : classRoom.getStudentNims()) {
+                        studentService.getAllStudents().stream()
+                            .filter(s -> nim.equals(s.getNim()))
+                            .findFirst()
+                            .ifPresent(student -> studentIds.add(student.getId()));
+                    }
+                    classRoom.setStudentIds(studentIds);
+                    log.info("Added {} students to class {}", studentIds.size(), classRoom.getName());
+                }
+
+                classRoomService.createClass(classRoom);
+            }
+
+            log.info("Successfully initialized {} classes from classes.json", classes.size());
+
+        } catch (Exception e) {
+            log.error("Failed to load classes from JSON: {}", e.getMessage(), e);
+        }
     }
 }

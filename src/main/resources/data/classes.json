@@ -1,0 +1,92 @@
+[
+  {
+    "code": "KLS001",
+    "name": "Basis Data - 2024 - Ganjil",
+    "subjectId": null,
+    "subjectName": "Basis Data",
+    "semester": "Ganjil",
+    "year": 2024,
+    "studentNims": ["1020200001", "1020200002", "1020210001", "1020210002", "1020220001"]
+  },
+  {
+    "code": "KLS002",
+    "name": "Sistem Informasi Manajemen - 2024 - Ganjil",
+    "subjectId": null,
+    "subjectName": "Sistem Informasi Manajemen",
+    "semester": "Ganjil",
+    "year": 2024,
+    "studentNims": ["1020200001", "1020200003", "1020220001", "1020220002", "1020230001"]
+  },
+  {
+    "code": "KLS003",
+    "name": "Analisis dan Desain Sistem - 2024 - Ganjil",
+    "subjectId": null,
+    "subjectName": "Analisis dan Desain Sistem",
+    "semester": "Ganjil",
+    "year": 2024,
+    "studentNims": ["1020210001", "1020210002", "1020220001", "1020230001", "1020240001"]
+  },
+  {
+    "code": "KLS004",
+    "name": "Pemrograman Web - 2024 - Genap",
+    "subjectId": null,
+    "subjectName": "Pemrograman Web",
+    "semester": "Genap",
+    "year": 2024,
+    "studentNims": ["1020200002", "1020210001", "1020220002", "1020230001", "1020240001"]
+  },
+  {
+    "code": "KLS005",
+    "name": "Jaringan Komputer - 2024 - Genap",
+    "subjectId": null,
+    "subjectName": "Jaringan Komputer",
+    "semester": "Genap",
+    "year": 2024,
+    "studentNims": ["1020200001", "1020210002", "1020220001", "1120200001", "1120210001"]
+  },
+  {
+    "code": "KLS006",
+    "name": "Pemrograman Java - 2024 - Ganjil",
+    "subjectId": null,
+    "subjectName": "Pemrograman Java",
+    "semester": "Ganjil",
+    "year": 2024,
+    "studentNims": ["1120200001", "1120200002", "1120210001", "1120210002", "1120220001"]
+  },
+  {
+    "code": "KLS007",
+    "name": "Pemrograman Python - 2024 - Ganjil",
+    "subjectId": null,
+    "subjectName": "Pemrograman Python",
+    "semester": "Ganjil",
+    "year": 2024,
+    "studentNims": ["1120200002", "1120210001", "1120220001", "1120220002", "1120230001"]
+  },
+  {
+    "code": "KLS008",
+    "name": "Machine Learning - 2024 - Genap",
+    "subjectId": null,
+    "subjectName": "Machine Learning",
+    "semester": "Genap",
+    "year": 2024,
+    "studentNims": ["1120210002", "1120220001", "1120230001", "1120240001"]
+  },
+  {
+    "code": "KLS009",
+    "name": "Data Mining - 2024 - Genap",
+    "subjectId": null,
+    "subjectName": "Data Mining",
+    "semester": "Genap",
+    "year": 2024,
+    "studentNims": ["1020220001", "1020230001", "1020240001", "1120220002", "1120230001"]
+  },
+  {
+    "code": "KLS010",
+    "name": "Cloud Computing - 2024 - Ganjil",
+    "subjectId": null,
+    "subjectName": "Cloud Computing",
+    "semester": "Ganjil",
+    "year": 2024,
+    "studentNims": ["1120200001", "1120210001", "1120220001", "1120230001", "1120240001"]
+  }
+]
