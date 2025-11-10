@@ -2,9 +2,12 @@ package com.example.webapp.controller;
 
 import com.example.webapp.model.Student;
 import com.example.webapp.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -66,7 +69,7 @@ public class StudentController {
      * Create new student
      */
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
         try {
             Student savedStudent = studentService.createStudent(student);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
@@ -79,13 +82,33 @@ public class StudentController {
      * Update existing student
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable String id, @RequestBody Student student) {
+    public ResponseEntity<Student> updateStudent(@PathVariable String id, @Valid @RequestBody Student student) {
         try {
             Student updatedStudent = studentService.updateStudent(id, student);
             return ResponseEntity.ok(updatedStudent);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    /**
+     * Handle validation errors
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        response.put("message", "Validation failed");
+        response.put("errors", errors);
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**

@@ -189,6 +189,48 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- SI Subjects -->
+                        <div class="col-xl-4 col-md-6">
+                            <div class="stat-card stat-card-warning">
+                                <div class="stat-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 class="stat-value">{{ stats.siSubjects }}</h3>
+                                    <p class="stat-label">Mata Kuliah SI</p>
+                                    <small>Sistem Informasi</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TI Subjects -->
+                        <div class="col-xl-4 col-md-6">
+                            <div class="stat-card stat-card-danger">
+                                <div class="stat-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 class="stat-value">{{ stats.tiSubjects }}</h3>
+                                    <p class="stat-label">Mata Kuliah TI</p>
+                                    <small>Teknologi Informasi</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Subjects -->
+                        <div class="col-xl-4 col-md-6">
+                            <div class="stat-card stat-card-secondary">
+                                <div class="stat-icon">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <h3 class="stat-value">{{ stats.totalSubjects }}</h3>
+                                    <p class="stat-label">Total Mata Kuliah</p>
+                                    <small>All Majors</small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -267,6 +309,7 @@
                                         <tr>
                                             <th>Kode</th>
                                             <th>Nama Mata Kuliah</th>
+                                            <th>Jurusan</th>
                                             <th>SKS</th>
                                             <th>Actions</th>
                                         </tr>
@@ -275,6 +318,7 @@
                                         <tr v-for="subject in subjectList" :key="subject.id">
                                             <td><strong>{{ subject.code }}</strong></td>
                                             <td>{{ subject.name }}</td>
+                                            <td><span class="badge" :class="subject.major === 'Sistem Informasi' ? 'bg-primary' : 'bg-success'">{{ subject.major }}</span></td>
                                             <td>{{ subject.sks }}</td>
                                             <td v-if="user.isAdmin">
                                                 <button class="btn btn-sm btn-light me-1" @click="editSubject(subject)">
@@ -289,7 +333,7 @@
                                             </td>
                                         </tr>
                                         <tr v-if="subjectList.length === 0">
-                                            <td colspan="4" class="text-center text-muted py-4">Tidak ada data mata kuliah</td>
+                                            <td colspan="5" class="text-center text-muted py-4">Tidak ada data mata kuliah</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -360,9 +404,8 @@
                 </div>
             </main>
         </div>
-    </div>
 
-    <!-- Student Modal -->
+        <!-- Student Modal -->
     <div class="modal fade" id="studentModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -393,7 +436,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Batch (Tahun Masuk)</label>
-                            <input type="number" class="form-control" v-model.number="studentForm.batch" min="2010" max="2030" required>
+                            <input type="number" class="form-control" v-model.number="studentForm.batch" min="2010" max="2030" required :readonly="studentForm.id !== null">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status</label>
@@ -433,8 +476,16 @@
                             <input type="text" class="form-control" v-model="subjectForm.name" required>
                         </div>
                         <div class="mb-3">
+                            <label class="form-label">Jurusan</label>
+                            <select class="form-select" v-model="subjectForm.major" required>
+                                <option value="">Pilih Jurusan</option>
+                                <option value="Sistem Informasi">Sistem Informasi</option>
+                                <option value="Teknologi Informasi">Teknologi Informasi</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">SKS</label>
-                            <input type="number" class="form-control" v-model.number="subjectForm.sks" required>
+                            <input type="number" class="form-control" v-model.number="subjectForm.sks" min="1" max="6" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -603,6 +654,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Bootstrap JS -->

@@ -54,28 +54,37 @@ const studentModule = {
          */
         showStudentModal(student) {
             if (student) {
-                // Edit mode - copy student data with all fields
-                this.studentForm.id = student.id;
-                this.studentForm.nim = student.nim;
-                this.studentForm.name = student.name;
-                this.studentForm.email = student.email;
-                this.studentForm.major = student.major;
-                this.studentForm.batch = student.batch;
-                this.studentForm.status = student.status;
+                // Edit mode - assign all student data at once for better reactivity
+                Object.assign(this.studentForm, {
+                    id: student.id,
+                    nim: student.nim,
+                    name: student.name,
+                    email: student.email,
+                    major: student.major,
+                    batch: student.batch,
+                    status: student.status
+                });
             } else {
                 // Add mode - reset form
-                this.studentForm.id = null;
-                this.studentForm.nim = '';
-                this.studentForm.name = '';
-                this.studentForm.email = '';
-                this.studentForm.major = '';
-                this.studentForm.batch = null;
-                this.studentForm.status = '';
+                Object.assign(this.studentForm, {
+                    id: null,
+                    nim: '',
+                    name: '',
+                    email: '',
+                    major: '',
+                    batch: null,
+                    status: ''
+                });
             }
 
-            // Show Bootstrap modal
-            const modal = new bootstrap.Modal(document.getElementById('studentModal'));
-            modal.show();
+            // Show Bootstrap modal with slight delay to ensure Vue has updated the DOM
+            setTimeout(() => {
+                const modalElement = document.getElementById('studentModal');
+                if (modalElement) {
+                    const modal = new bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            }, 10);
         },
 
         /**

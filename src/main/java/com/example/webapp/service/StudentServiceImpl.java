@@ -2,7 +2,9 @@ package com.example.webapp.service;
 
 import com.example.webapp.model.Student;
 import com.example.webapp.model.StudentStatus;
+import com.example.webapp.model.Subject;
 import com.example.webapp.repository.StudentRepository;
+import com.example.webapp.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     @Value("${major.options}")
     private String majorOptions;
@@ -121,10 +126,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Map<String, Object> getStatistics() {
         List<Student> allStudents = studentRepository.findAll();
+        List<Subject> allSubjects = subjectRepository.findAll();
 
         Map<String, Object> stats = new HashMap<>();
 
-        // Count by major
+        // Count students by major
         long siTotal = allStudents.stream()
             .filter(s -> "Sistem Informasi".equals(s.getMajor()))
             .count();
@@ -132,7 +138,7 @@ public class StudentServiceImpl implements StudentService {
             .filter(s -> "Teknologi Informasi".equals(s.getMajor()))
             .count();
 
-        // Count active by major
+        // Count active students by major
         long siActive = allStudents.stream()
             .filter(s -> "Sistem Informasi".equals(s.getMajor()) && StudentStatus.ACTIVE.equals(s.getStatus()))
             .count();
@@ -140,12 +146,20 @@ public class StudentServiceImpl implements StudentService {
             .filter(s -> "Teknologi Informasi".equals(s.getMajor()) && StudentStatus.ACTIVE.equals(s.getStatus()))
             .count();
 
-        // Count not active by major
+        // Count not active students by major
         long siNotActive = allStudents.stream()
             .filter(s -> "Sistem Informasi".equals(s.getMajor()) && StudentStatus.NOT_ACTIVE.equals(s.getStatus()))
             .count();
         long tiNotActive = allStudents.stream()
             .filter(s -> "Teknologi Informasi".equals(s.getMajor()) && StudentStatus.NOT_ACTIVE.equals(s.getStatus()))
+            .count();
+
+        // Count subjects by major
+        long siSubjects = allSubjects.stream()
+            .filter(s -> "Sistem Informasi".equals(s.getMajor()))
+            .count();
+        long tiSubjects = allSubjects.stream()
+            .filter(s -> "Teknologi Informasi".equals(s.getMajor()))
             .count();
 
         stats.put("siTotal", siTotal);
@@ -155,6 +169,9 @@ public class StudentServiceImpl implements StudentService {
         stats.put("siNotActive", siNotActive);
         stats.put("tiNotActive", tiNotActive);
         stats.put("totalStudents", allStudents.size());
+        stats.put("siSubjects", siSubjects);
+        stats.put("tiSubjects", tiSubjects);
+        stats.put("totalSubjects", allSubjects.size());
 
         return stats;
     }

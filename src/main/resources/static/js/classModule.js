@@ -30,7 +30,8 @@ const classModule = {
             fetch('/api/classes')
                 .then(response => response.json())
                 .then(data => {
-                    this.classList = data;
+                    // Force Vue reactivity by replacing the entire array
+                    this.classList.splice(0, this.classList.length, ...data);
                 })
                 .catch(error => {
                     console.error('Error loading classes:', error);
@@ -223,8 +224,15 @@ const classModule = {
             .then(response => {
                 if (response.ok) {
                     this.showNotification('success', 'Mahasiswa berhasil ditambahkan ke kelas');
-                    this.loadEnrolledStudents(this.classForm.id);
-                    this.loadClasses();  // Refresh class list
+                    // Update local classForm
+                    if (!this.classForm.studentIds.includes(studentId)) {
+                        this.classForm.studentIds.push(studentId);
+                    }
+                    // Reload data with slight delay to ensure backend has updated
+                    setTimeout(() => {
+                        this.loadEnrolledStudents(this.classForm.id);
+                        this.loadClasses();  // Refresh class list
+                    }, 100);
                 } else {
                     this.showNotification('error', 'Gagal menambahkan mahasiswa');
                 }
@@ -248,8 +256,16 @@ const classModule = {
                 .then(response => {
                     if (response.ok) {
                         this.showNotification('success', 'Mahasiswa berhasil dihapus dari kelas');
-                        this.loadEnrolledStudents(this.classForm.id);
-                        this.loadClasses();  // Refresh class list
+                        // Update local classForm
+                        const index = this.classForm.studentIds.indexOf(studentId);
+                        if (index > -1) {
+                            this.classForm.studentIds.splice(index, 1);
+                        }
+                        // Reload data with slight delay to ensure backend has updated
+                        setTimeout(() => {
+                            this.loadEnrolledStudents(this.classForm.id);
+                            this.loadClasses();  // Refresh class list
+                        }, 100);
                     } else {
                         this.showNotification('error', 'Gagal menghapus mahasiswa');
                     }

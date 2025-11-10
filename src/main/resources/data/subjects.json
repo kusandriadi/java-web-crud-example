@@ -2,151 +2,181 @@
   {
     "code": "SI001",
     "name": "Basis Data",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI002",
     "name": "Sistem Informasi Manajemen",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI003",
     "name": "Analisis dan Desain Sistem",
+    "major": "Sistem Informasi",
     "sks": 4
   },
   {
     "code": "SI004",
     "name": "Pemrograman Web",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI005",
     "name": "Jaringan Komputer",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI006",
     "name": "Sistem Operasi",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI007",
     "name": "Struktur Data",
+    "major": "Sistem Informasi",
     "sks": 4
   },
   {
     "code": "SI008",
     "name": "Algoritma Pemrograman",
+    "major": "Sistem Informasi",
     "sks": 4
   },
   {
     "code": "SI009",
     "name": "Manajemen Proyek TI",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI010",
     "name": "Keamanan Informasi",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI011",
     "name": "Data Mining",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI012",
     "name": "Business Intelligence",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI013",
     "name": "E-Business",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "SI014",
     "name": "Enterprise Resource Planning",
+    "major": "Sistem Informasi",
     "sks": 4
   },
   {
     "code": "SI015",
     "name": "Audit Sistem Informasi",
+    "major": "Sistem Informasi",
     "sks": 3
   },
   {
     "code": "TI001",
     "name": "Pemrograman Java",
+    "major": "Teknologi Informasi",
     "sks": 4
   },
   {
     "code": "TI002",
     "name": "Pemrograman Python",
+    "major": "Teknologi Informasi",
     "sks": 4
   },
   {
     "code": "TI003",
     "name": "Pemrograman C++",
+    "major": "Teknologi Informasi",
     "sks": 4
   },
   {
     "code": "TI004",
     "name": "Pemrograman Mobile",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI005",
     "name": "Cloud Computing",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI006",
     "name": "DevOps",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI007",
     "name": "Arsitektur Komputer",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI008",
     "name": "Internet of Things",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI009",
     "name": "Blockchain Technology",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI010",
     "name": "Machine Learning",
+    "major": "Teknologi Informasi",
     "sks": 4
   },
   {
     "code": "TI011",
     "name": "Deep Learning",
+    "major": "Teknologi Informasi",
     "sks": 4
   },
   {
     "code": "TI012",
     "name": "Computer Vision",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI013",
     "name": "Natural Language Processing",
+    "major": "Teknologi Informasi",
     "sks": 3
   },
   {
     "code": "TI014",
     "name": "Big Data Analytics",
+    "major": "Teknologi Informasi",
     "sks": 4
   },
   {
     "code": "TI015",
     "name": "Cyber Security",
+    "major": "Teknologi Informasi",
     "sks": 3
   }
 ]

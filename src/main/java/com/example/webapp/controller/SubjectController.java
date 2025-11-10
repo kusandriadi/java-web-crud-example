@@ -2,12 +2,17 @@ package com.example.webapp.controller;
 
 import com.example.webapp.model.Subject;
 import com.example.webapp.service.SubjectService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST Controller for Subject operations
@@ -44,7 +49,7 @@ public class SubjectController {
      * Create new subject
      */
     @PostMapping
-    public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
+    public ResponseEntity<Subject> createSubject(@Valid @RequestBody Subject subject) {
         try {
             Subject savedSubject = subjectService.createSubject(subject);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedSubject);
@@ -57,13 +62,33 @@ public class SubjectController {
      * Update existing subject
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Subject> updateSubject(@PathVariable String id, @RequestBody Subject subject) {
+    public ResponseEntity<Subject> updateSubject(@PathVariable String id, @Valid @RequestBody Subject subject) {
         try {
             Subject updatedSubject = subjectService.updateSubject(id, subject);
             return ResponseEntity.ok(updatedSubject);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    /**
+     * Handle validation errors
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        response.put("message", "Validation failed");
+        response.put("errors", errors);
+        return ResponseEntity.badRequest().body(response);
     }
 
     /**

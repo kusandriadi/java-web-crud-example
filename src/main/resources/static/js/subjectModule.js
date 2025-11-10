@@ -10,6 +10,7 @@ const subjectModule = {
             id: null,
             code: '',
             name: '',
+            major: '',
             sks: null
         }
     },
@@ -40,12 +41,14 @@ const subjectModule = {
                 this.subjectForm.id = subject.id;
                 this.subjectForm.code = subject.code;
                 this.subjectForm.name = subject.name;
+                this.subjectForm.major = subject.major;
                 this.subjectForm.sks = subject.sks;
             } else {
                 // Add mode - reset form
                 this.subjectForm.id = null;
                 this.subjectForm.code = '';
                 this.subjectForm.name = '';
+                this.subjectForm.major = '';
                 this.subjectForm.sks = null;
             }
 

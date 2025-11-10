@@ -43,6 +43,7 @@ const app = createApp({
                 id: null,
                 code: '',
                 name: '',
+                major: '',
                 sks: null
             },
 
@@ -70,7 +71,10 @@ const app = createApp({
                 tiActive: 0,
                 siNotActive: 0,
                 tiNotActive: 0,
-                totalStudents: 0
+                totalStudents: 0,
+                siSubjects: 0,
+                tiSubjects: 0,
+                totalSubjects: 0
             },
 
             // Custom modal data

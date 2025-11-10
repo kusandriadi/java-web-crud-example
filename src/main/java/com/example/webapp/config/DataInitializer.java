@@ -53,7 +53,8 @@ public class DataInitializer implements CommandLineRunner {
             if (subjectService.countSubjects() == 0) {
                 initializeSubjects();
             } else {
-                log.info("Subjects collection already has data, skipping initialization");
+                log.info("Subjects collection already has data, checking for major field migration...");
+                migrateSubjectMajors();
             }
 
             if (classRoomService.countClasses() == 0) {
@@ -123,6 +124,45 @@ public class DataInitializer implements CommandLineRunner {
 
         } catch (Exception e) {
             log.error("Failed to load subjects from JSON: {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Migrate existing subjects to add major field based on code prefix
+     */
+    private void migrateSubjectMajors() {
+        try {
+            log.info("Migrating subjects to add major field...");
+
+            List<Subject> allSubjects = subjectService.getAllSubjects();
+            int migrated = 0;
+
+            for (Subject subject : allSubjects) {
+                // Only update if major is null or empty
+                if (subject.getMajor() == null || subject.getMajor().isEmpty()) {
+                    // Determine major based on code prefix
+                    if (subject.getCode() != null) {
+                        if (subject.getCode().startsWith("SI")) {
+                            subject.setMajor("Sistem Informasi");
+                            subjectService.updateSubject(subject.getId(), subject);
+                            migrated++;
+                        } else if (subject.getCode().startsWith("TI")) {
+                            subject.setMajor("Teknologi Informasi");
+                            subjectService.updateSubject(subject.getId(), subject);
+                            migrated++;
+                        }
+                    }
+                }
+            }
+
+            if (migrated > 0) {
+                log.info("Successfully migrated {} subjects with major field", migrated);
+            } else {
+                log.info("No subjects needed migration");
+            }
+
+        } catch (Exception e) {
+            log.error("Failed to migrate subjects: {}", e.getMessage(), e);
         }
     }
 

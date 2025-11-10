@@ -34,28 +34,39 @@ public class SubjectServiceImpl implements SubjectService {
         if (subject.getName() == null || subject.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Subject name cannot be empty");
         }
+        if (subject.getMajor() == null || subject.getMajor().trim().isEmpty()) {
+            throw new IllegalArgumentException("Major cannot be empty");
+        }
         if (subject.getSks() == null || subject.getSks() < 1 || subject.getSks() > 6) {
             throw new IllegalArgumentException("SKS must be between 1 and 6");
         }
 
-        // Auto-generate code if not provided
-        if (subject.getCode() == null || subject.getCode().trim().isEmpty()) {
-            subject.setCode(generateSubjectCode());
-        }
+        // Auto-generate code based on major
+        subject.setCode(generateSubjectCode(subject.getMajor()));
 
         return subjectRepository.save(subject);
     }
 
     /**
-     * Generate subject code with format: MK###
-     * MK = Mata Kuliah
-     * ### = sequence number (001, 002, etc.)
+     * Generate subject code with format: XXYYY
+     * XX = SI (Sistem Informasi) or TI (Teknologi Informasi)
+     * YYY = sequence number (001, 002, etc.)
      */
-    private String generateSubjectCode() {
+    private String generateSubjectCode(String major) {
+        // Determine prefix based on major
+        String prefix;
+        if (major.equals("Sistem Informasi")) {
+            prefix = "SI";
+        } else if (major.equals("Teknologi Informasi")) {
+            prefix = "TI";
+        } else {
+            throw new IllegalArgumentException("Invalid major: " + major);
+        }
+
+        // Find max sequence for this major
         List<Subject> existingSubjects = subjectRepository.findAll();
         int maxSequence = 0;
 
-        String prefix = "MK";
         for (Subject s : existingSubjects) {
             if (s.getCode() != null && s.getCode().startsWith(prefix)) {
                 try {
@@ -80,6 +91,27 @@ public class SubjectServiceImpl implements SubjectService {
         Optional<Subject> existingSubject = subjectRepository.findById(id);
         if (existingSubject.isEmpty()) {
             throw new IllegalArgumentException("Subject not found with id: " + id);
+        }
+
+        // Keep the existing code, regenerate if major changed
+        Subject existing = existingSubject.get();
+
+        // Check if major has changed (handle null values)
+        boolean majorChanged = false;
+        if (existing.getMajor() == null && subject.getMajor() != null) {
+            // Major was null, now has value - don't regenerate code
+            majorChanged = false;
+        } else if (existing.getMajor() != null && !existing.getMajor().equals(subject.getMajor())) {
+            // Major actually changed
+            majorChanged = true;
+        }
+
+        if (majorChanged) {
+            // Major changed, regenerate code
+            subject.setCode(generateSubjectCode(subject.getMajor()));
+        } else {
+            // Keep existing code
+            subject.setCode(existing.getCode());
         }
 
         subject.setId(id);
