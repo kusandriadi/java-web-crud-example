@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Backend Development & MVC Architecture</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/night.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/monokai.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
+        .reveal pre { font-size: 0.45em; width: 100%; }
+        .reveal code { max-height: 500px; }
+        .diagram { background: white; padding: 20px; border-radius: 10px; color: black; margin: 20px 0; }
+        .architecture-diagram { font-family: monospace; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section data-markdown>
+                <textarea data-template>
+                    # Module 2
+                    ## Backend Development with Spring Boot & MVC Architecture
+
+                    **Pemrograman Web - Semester 3**
+
+                    Duration: 3-4 weeks
+                </textarea>
+            </section>
+
+            <!-- Learning Objectives -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Learning Objectives
+
+                    By the end of this module, you will:
+
+                    1. Understand MVC (Model-View-Controller) architecture
+                    2. Create Spring Boot projects
+                    3. Build RESTful APIs
+                    4. Understand HTTP methods (GET, POST, PUT, DELETE)
+                    5. Implement layered architecture (Controller-Service-Repository)
+                    6. Test APIs with Postman
+                    7. Build complete CRUD operations
+                </textarea>
+            </section>
+
+            <!-- Java Review -->
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+                        ## Java Basics Review
+
+                        Quick refresher before Spring Boot
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Classes & Objects
+
+                        ```java
+                        // Class definition
+                        public class Student {
+                            // Fields (attributes)
+                            private String name;
+                            private String email;
+                            private int age;
+
+                            // Constructor
+                            public Student(String name, String email, int age) {
+                                this.name = name;
+                                this.email = email;
+                                this.age = age;
+                            }
+
+                            // Getter
+                            public String getName() {
+                                return name;
+                            }
+
+                            // Setter
+                            public void setName(String name) {
+                                this.name = name;
+                            }
+                        }
+
+                        // Creating object
+                        Student student = new Student("John", "john@mail.com", 20);
+                        System.out.println(student.getName()); // Output: John
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Annotations in Java
+
+                        Annotations = Metadata for the compiler/framework
+
+                        ```java
+                        @Override  // Method overrides parent method
+                        public String toString() {
+                            return "Student: " + name;
+                        }
+
+                        @Deprecated  // Method is old, don't use
+                        public void oldMethod() {
+                            // ...
+                        }
+
+                        // Spring Boot annotations (we'll learn these)
+                        @RestController  // Marks class as REST controller
+                        @GetMapping     // Maps method to HTTP GET
+                        @Autowired      // Automatic dependency injection
+                        ```
+
+                        **Think of annotations as labels/tags** that tell Spring Boot what to do
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Collections (List, Map)
+
+                        ```java
+                        import java.util.*;
+
+                        // List (ordered collection)
+                        List<String> names = new ArrayList<>();
+                        names.add("John");
+                        names.add("Jane");
+                        System.out.println(names.get(0)); // John
+
+                        // Map (key-value pairs)
+                        Map<String, String> student = new HashMap<>();
+                        student.put("name", "John");
+                        student.put("email", "john@mail.com");
+                        System.out.println(student.get("name")); // John
+
+                        // Looping
+                        for (String name : names) {
+                            System.out.println(name);
+                        }
+
+                        // Lambda (Java 8+)
+                        names.forEach(name -> System.out.println(name));
+                        ```
+                    </textarea>
+                </section>
+            </section>
+
+            <!-- Spring Boot Intro -->
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+                        ## What is Spring Boot?
+
+                        **Spring Boot** = Framework to build Java applications easily
+
+                        **Why use Spring Boot?**
+                        - Makes web development MUCH easier
+                        - Built-in web server (Tomcat)
+                        - Auto-configuration
+                        - Huge ecosystem (Security, Data, Cloud, etc.)
+                        - Industry standard for Java backends
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Creating Spring Boot Project
+
+                        **Method 1: Spring Initializr (Recommended)**
+
+                        1. Go to [start.spring.io](https://start.spring.io)
+                        2. Choose:
+                           - Project: Maven
+                           - Language: Java
+                           - Spring Boot: 3.2.1
+                           - Java: 21
+                        3. Add Dependencies:
+                           - Spring Web
+                           - Spring Data MongoDB
+                           - Lombok
+                        4. Click "Generate"
+                        5. Extract ZIP and open in IntelliJ/Eclipse
+
+                        **Method 2: IDE (IntelliJ Ultimate)**
+                        - File → New → Project → Spring Initializr
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Project Structure
+
+                        ```
+                        my-app/
+                        ├── src/
+                        │   ├── main/
+                        │   │   ├── java/com/example/myapp/
+                        │   │   │   ├── MyAppApplication.java    ← Main class
+                        │   │   │   ├── controller/              ← REST controllers
+                        │   │   │   ├── model/                   ← Data models (entities)
+                        │   │   │   ├── repository/              ← Database access
+                        │   │   │   └── service/                 ← Business logic
+                        │   │   └── resources/
+                        │   │       ├── application.properties   ← Configuration
+                        │   │       └── static/                  ← HTML/CSS/JS files
+                        │   └── test/                            ← Unit tests
+                        ├── target/                              ← Compiled files
+                        └── pom.xml                              ← Maven dependencies
+                        ```
+
+                        **Important folders:**
+                        - `controller/` - Handle HTTP requests
+                        - `service/` - Business logic
+                        - `repository/` - Database operations
+                        - `model/` - Data classes
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### First Spring Boot Application
+
+                        ```java
+                        package com.example.myapp;
+
+                        import org.springframework.boot.SpringApplication;
+                        import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+                        @SpringBootApplication  // Marks this as Spring Boot app
+                        public class MyAppApplication {
+                            public static void main(String[] args) {
+                                SpringApplication.run(MyAppApplication.class, args);
+                            }
+                        }
+                        ```
+
+                        **Run the application:**
+                        ```bash
+                        mvn spring-boot:run
+                        ```
+
+                        **Output:**
+                        ```
+                        Tomcat started on port(s): 8080
+                        Started MyAppApplication in 2.5 seconds
+                        ```
+
+                        Application is now running at `http://localhost:8080`
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### First REST Controller
+
+                        ```java
+                        package com.example.myapp.controller;
+
+                        import org.springframework.web.bind.annotation.*;
+
+                        @RestController
+                        @RequestMapping("/api")
+                        public class HelloController {
+
+                            @GetMapping("/hello")
+                            public String hello() {
+                                return "Hello, World!";
+                            }
+
+                            @GetMapping("/greet/{name}")
+                            public String greet(@PathVariable String name) {
+                                return "Hello, " + name + "!";
+                            }
+                        }
+                        ```
+
+                        **Test in browser:**
+                        - `http://localhost:8080/api/hello` → "Hello, World!"
+                        - `http://localhost:8080/api/greet/John` → "Hello, John!"
+
+                        **Annotations explained:**
+                        - `@RestController` - This class handles HTTP requests and returns JSON
+                        - `@RequestMapping("/api")` - All methods start with /api
+                        - `@GetMapping("/hello")` - Maps to GET /api/hello
+                        - `@PathVariable` - Extract value from URL
+                    </textarea>
+                </section>
+            </section>
+
+            <!-- MVC Architecture -->
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+                        ## MVC Architecture ⭐
+
+                        **MVC** = Model-View-Controller
+
+                        A design pattern to organize code
+
+                        **Separation of Concerns:**
+                        - Each layer has ONE responsibility
+                        - Easy to maintain and test
+                        - Industry standard
+                    </textarea>
+                </section>
+
+                <section>
+                    <h3>MVC Diagram</h3>
+                    <div class="diagram architecture-diagram">
+                        <pre style="color: black;">
+    ┌─────────────┐
+    │   Browser   │
+    └──────┬──────┘
+           │ HTTP Request (GET /api/students)
+           ▼
+    ┌──────────────────────────────────────────────────┐
+    │              CONTROLLER Layer                    │
+    │  @RestController                                 │
+    │  - Handles HTTP requests/responses               │
+    │  - Validates input                               │
+    │  - Calls Service layer                           │
+    └──────┬───────────────────────────────────────────┘
+           │ Call method: service.getAllStudents()
+           ▼
+    ┌──────────────────────────────────────────────────┐
+    │               SERVICE Layer                      │
+    │  @Service                                        │
+    │  - Business logic                                │
+    │  - Validation rules                              │
+    │  - Calls Repository layer                        │
+    └──────┬───────────────────────────────────────────┘
+           │ Call method: repository.findAll()
+           ▼
+    ┌──────────────────────────────────────────────────┐
+    │             REPOSITORY Layer                     │
+    │  @Repository / Interface                         │
+    │  - Database operations (CRUD)                    │
+    │  - Queries                                       │
+    └──────┬───────────────────────────────────────────┘
+           │ SQL/MongoDB Query
+           ▼
+    ┌──────────────┐
+    │   DATABASE   │
+    │   (MongoDB)  │
+    └──────────────┘
+                        </pre>
+                    </div>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### MODEL Layer
+
+                        **Model** = Data representation (entities/POJOs)
+
+                        ```java
+                        package com.example.myapp.model;
+
+                        import org.springframework.data.annotation.Id;
+                        import org.springframework.data.mongodb.core.mapping.Document;
+                        import lombok.Data;
+
+                        @Data  // Lombok: auto-generates getters/setters/toString
+                        @Document(collection = "students")  // MongoDB collection name
+                        public class Student {
+
+                            @Id  // Primary key
+                            private String id;
+
+                            private String nim;
+                            private String name;
+                            private String email;
+                            private String major;
+                            private Integer batch;
+                            private String status;
+                        }
+                        ```
+
+                        **Annotations:**
+                        - `@Data` (Lombok) - Auto-generates getters, setters, toString, equals, hashCode
+                        - `@Document` - Marks as MongoDB document (table in SQL)
+                        - `@Id` - Primary key field
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### REPOSITORY Layer
+
+                        **Repository** = Database access (CRUD operations)
+
+                        ```java
+                        package com.example.myapp.repository;
+
+                        import com.example.myapp.model.Student;
+                        import org.springframework.data.mongodb.repository.MongoRepository;
+
+                        public interface StudentRepository extends MongoRepository<Student, String> {
+                            // Spring Data automatically provides:
+                            // - save(student)         → Insert/Update
+                            // - findAll()             → Get all students
+                            // - findById(id)          → Get one student
+                            // - deleteById(id)        → Delete student
+                            // - count()               → Count records
+
+                            // You can add custom queries:
+                            List<Student> findByMajor(String major);
+                            List<Student> findByBatch(Integer batch);
+                            Student findByNim(String nim);
+                        }
+                        ```
+
+                        **Key Point:** Just create an **interface**, Spring Data implements it automatically!
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### SERVICE Layer
+
+                        **Service** = Business logic (rules, calculations, validations)
+
+                        ```java
+                        package com.example.myapp.service;
+
+                        import com.example.myapp.model.Student;
+                        import java.util.List;
+
+                        public interface StudentService {
+                            List<Student> getAllStudents();
+                            Student getStudentById(String id);
+                            Student createStudent(Student student);
+                            Student updateStudent(String id, Student student);
+                            void deleteStudent(String id);
+                        }
+                        ```
+
+                        **Why use Service layer?**
+                        - Separates business logic from controllers
+                        - Reusable code (multiple controllers can use same service)
+                        - Easier to test
+                        - Can add validation, calculations, etc.
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### SERVICE Implementation
+
+                        ```java
+                        package com.example.myapp.service;
+
+                        import com.example.myapp.model.Student;
+                        import com.example.myapp.repository.StudentRepository;
+                        import org.springframework.beans.factory.annotation.Autowired;
+                        import org.springframework.stereotype.Service;
+                        import java.util.List;
+
+                        @Service
+                        public class StudentServiceImpl implements StudentService {
+
+                            @Autowired  // Automatic dependency injection
+                            private StudentRepository repository;
+
+                            @Override
+                            public List<Student> getAllStudents() {
+                                return repository.findAll();
+                            }
+
+                            @Override
+                            public Student getStudentById(String id) {
+                                return repository.findById(id)
+                                    .orElseThrow(() -> new RuntimeException("Student not found"));
+                            }
+
+                            @Override
+                            public Student createStudent(Student student) {
+                                // Business logic: auto-generate NIM
+                                if (student.getNim() == null) {
+                                    student.setNim(generateNIM(student.getMajor(), student.getBatch()));
+                                }
+                                return repository.save(student);
+                            }
+
+                            private String generateNIM(String major, Integer batch) {
+                                String prefix = major.equals("Sistem Informasi") ? "SI" : "TI";
+                                int count = repository.findByMajorAndBatch(major, batch).size() + 1;
+                                return String.format("%s%d%03d", prefix, batch, count);
+                            }
+                        }
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### CONTROLLER Layer
+
+                        **Controller** = Handle HTTP requests and responses
+
+                        ```java
+                        package com.example.myapp.controller;
+
+                        import com.example.myapp.model.Student;
+                        import com.example.myapp.service.StudentService;
+                        import org.springframework.beans.factory.annotation.Autowired;
+                        import org.springframework.http.ResponseEntity;
+                        import org.springframework.web.bind.annotation.*;
+                        import java.util.List;
+
+                        @RestController
+                        @RequestMapping("/api/students")
+                        public class StudentController {
+
+                            @Autowired
+                            private StudentService studentService;
+
+                            @GetMapping
+                            public List<Student> getAllStudents() {
+                                return studentService.getAllStudents();
+                            }
+
+                            @GetMapping("/{id}")
+                            public ResponseEntity<Student> getStudentById(@PathVariable String id) {
+                                Student student = studentService.getStudentById(id);
+                                return ResponseEntity.ok(student);
+                            }
+
+                            @PostMapping
+                            public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+                                Student saved = studentService.createStudent(student);
+                                return ResponseEntity.status(201).body(saved);
+                            }
+
+                            @PutMapping("/{id}")
+                            public ResponseEntity<Student> updateStudent(
+                                @PathVariable String id,
+                                @RequestBody Student student
+                            ) {
+                                Student updated = studentService.updateStudent(id, student);
+                                return ResponseEntity.ok(updated);
+                            }
+
+                            @DeleteMapping("/{id}")
+                            public ResponseEntity<Void> deleteStudent(@PathVariable String id) {
+                                studentService.deleteStudent(id);
+                                return ResponseEntity.ok().build();
+                            }
+                        }
+                        ```
+                    </textarea>
+                </section>
+            </section>
+
+            <!-- HTTP Methods -->
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+                        ## HTTP Methods ⭐
+
+                        How browsers/apps communicate with servers
+
+                        **Main methods:**
+                        - **GET** - Retrieve data (Read)
+                        - **POST** - Create new data (Create)
+                        - **PUT** - Update existing data (Update)
+                        - **DELETE** - Remove data (Delete)
+
+                        **CRUD = Create, Read, Update, Delete**
+                    </textarea>
+                </section>
+
+                <section>
+                    <h3>HTTP Methods Explained</h3>
+                    <table style="font-size: 0.7em;">
+                        <tr>
+                            <th>Method</th>
+                            <th>Purpose</th>
+                            <th>Example</th>
+                            <th>Has Body?</th>
+                        </tr>
+                        <tr>
+                            <td><strong>GET</strong></td>
+                            <td>Retrieve data</td>
+                            <td>GET /api/students<br>GET /api/students/123</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td><strong>POST</strong></td>
+                            <td>Create new data</td>
+                            <td>POST /api/students<br>Body: {"name":"John"}</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PUT</strong></td>
+                            <td>Update data</td>
+                            <td>PUT /api/students/123<br>Body: {"name":"John Smith"}</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DELETE</strong></td>
+                            <td>Remove data</td>
+                            <td>DELETE /api/students/123</td>
+                            <td>❌ No</td>
+                        </tr>
+                    </table>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### HTTP Status Codes
+
+                        Server responses include status codes:
+
+                        **Success (2xx):**
+                        - `200 OK` - Request successful (GET, PUT, DELETE)
+                        - `201 Created` - Resource created successfully (POST)
+                        - `204 No Content` - Success but no data to return
+
+                        **Client Errors (4xx):**
+                        - `400 Bad Request` - Invalid data sent
+                        - `404 Not Found` - Resource doesn't exist
+                        - `401 Unauthorized` - Login required
+                        - `403 Forbidden` - No permission
+
+                        **Server Errors (5xx):**
+                        - `500 Internal Server Error` - Something went wrong on server
+                        - `503 Service Unavailable` - Server is down
+
+                        **In Spring Boot:**
+                        ```java
+                        return ResponseEntity.status(201).body(student);  // 201 Created
+                        return ResponseEntity.ok(student);                 // 200 OK
+                        return ResponseEntity.notFound().build();          // 404 Not Found
+                        return ResponseEntity.badRequest().build();        // 400 Bad Request
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Complete CRUD Example
+
+                        **GET - Retrieve all students**
+                        ```
+                        GET http://localhost:8080/api/students
+                        Response: [
+                          {"id":"1", "nim":"SI2020001", "name":"John"},
+                          {"id":"2", "nim":"TI2020001", "name":"Jane"}
+                        ]
+                        ```
+
+                        **GET - Retrieve one student**
+                        ```
+                        GET http://localhost:8080/api/students/1
+                        Response: {"id":"1", "nim":"SI2020001", "name":"John"}
+                        ```
+
+                        **POST - Create new student**
+                        ```
+                        POST http://localhost:8080/api/students
+                        Body: {"nim":"SI2020003", "name":"Bob", "email":"bob@mail.com"}
+                        Response: {"id":"3", "nim":"SI2020003", "name":"Bob", "email":"bob@mail.com"}
+                        ```
+
+                        **PUT - Update student**
+                        ```
+                        PUT http://localhost:8080/api/students/3
+                        Body: {"nim":"SI2020003", "name":"Robert", "email":"robert@mail.com"}
+                        Response: {"id":"3", "nim":"SI2020003", "name":"Robert", "email":"robert@mail.com"}
+                        ```
+
+                        **DELETE - Remove student**
+                        ```
+                        DELETE http://localhost:8080/api/students/3
+                        Response: 200 OK (no body)
+                        ```
+                    </textarea>
+                </section>
+            </section>
+
+            <!-- Postman -->
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+                        ## Testing APIs with Postman
+
+                        **Postman** = Tool to test REST APIs
+
+                        **Why use Postman?**
+                        - Test POST/PUT/DELETE (browsers only do GET)
+                        - Send JSON data in request body
+                        - View responses clearly
+                        - Save requests for reuse
+                        - Professional development tool
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Postman Setup
+
+                        **Download:**
+                        1. Go to [postman.com](https://www.postman.com/downloads/)
+                        2. Download for your OS (Windows/Mac/Linux)
+                        3. Install and create free account
+
+                        **Alternative: Use Postman Web**
+                        - No installation needed
+                        - Works in browser
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Testing GET Request
+
+                        **Steps:**
+                        1. Create new request
+                        2. Set method to **GET**
+                        3. Enter URL: `http://localhost:8080/api/students`
+                        4. Click **Send**
+                        5. View response in bottom panel
+
+                        **Screenshot placeholder:**
+                        ```
+                        [Postman Interface]
+                        GET | http://localhost:8080/api/students      [Send]
+
+                        Response:
+                        Status: 200 OK
+                        Body:
+                        [
+                          {"id": "1", "nim": "SI2020001", "name": "John"},
+                          {"id": "2", "nim": "TI2020001", "name": "Jane"}
+                        ]
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Testing POST Request
+
+                        **Steps:**
+                        1. Set method to **POST**
+                        2. URL: `http://localhost:8080/api/students`
+                        3. Go to **Body** tab
+                        4. Select **raw** and **JSON** format
+                        5. Enter JSON data:
+                        ```json
+                        {
+                          "nim": "SI2020003",
+                          "name": "Bob Smith",
+                          "email": "bob@example.com",
+                          "major": "Sistem Informasi",
+                          "batch": 2020,
+                          "status": "ACTIVE"
+                        }
+                        ```
+                        6. Click **Send**
+                        7. Response should show created student with ID
+
+                        **Expected Response:**
+                        ```json
+                        {
+                          "id": "abc123",
+                          "nim": "SI2020003",
+                          "name": "Bob Smith",
+                          "email": "bob@example.com"
+                        }
+                        Status: 201 Created
+                        ```
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Testing PUT Request
+
+                        **Update existing student:**
+
+                        1. Method: **PUT**
+                        2. URL: `http://localhost:8080/api/students/abc123`
+                        3. Body (raw JSON):
+                        ```json
+                        {
+                          "nim": "SI2020003",
+                          "name": "Robert Smith",
+                          "email": "robert@example.com",
+                          "major": "Sistem Informasi",
+                          "batch": 2020,
+                          "status": "ACTIVE"
+                        }
+                        ```
+                        4. Send
+                        5. Response: Updated student with 200 OK
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Testing DELETE Request
+
+                        **Remove student:**
+
+                        1. Method: **DELETE**
+                        2. URL: `http://localhost:8080/api/students/abc123`
+                        3. No body needed
+                        4. Send
+                        5. Response: 200 OK (empty body)
+
+                        **Verify deletion:**
+                        - Try GET request to same URL
+                        - Should return 404 Not Found
+                    </textarea>
+                </section>
+            </section>
+
+            <!-- Hands-on Lab -->
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+                        ## Hands-on Lab Exercise
+
+                        Build a Subject Management Backend
+
+                        **Requirements:**
+                        1. Create Spring Boot project
+                        2. Create Subject entity (Model)
+                        3. Create SubjectRepository (Repository)
+                        4. Create SubjectService (Service)
+                        5. Create SubjectController (Controller)
+                        6. Implement full CRUD operations
+                        7. Test with Postman
+
+                        **No database yet** - we'll use in-memory storage for now
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Subject Model
+
+                        ```java
+                        @Data
+                        @Document(collection = "subjects")
+                        public class Subject {
+                            @Id
+                            private String id;
+                            private String code;    // SI001, TI001
+                            private String name;    // Database Systems
+                            private String major;   // Sistem Informasi
+                            private Integer sks;    // 3
+                        }
+                        ```
+
+                        **API Endpoints to implement:**
+                        - GET /api/subjects - Get all subjects
+                        - GET /api/subjects/{id} - Get one subject
+                        - POST /api/subjects - Create subject
+                        - PUT /api/subjects/{id} - Update subject
+                        - DELETE /api/subjects/{id} - Delete subject
+                    </textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+                        ### Lab Submission
+
+                        **Submit:**
+                        1. Complete source code (ZIP)
+                        2. Postman collection (export as JSON)
+                        3. Screenshots of testing each endpoint
+                        4. README with instructions to run
+
+                        **Grading:**
+                        - Model/Entity implementation (15%)
+                        - Repository implementation (15%)
+                        - Service layer (25%)
+                        - Controller layer (25%)
+                        - Postman testing (15%)
+                        - Code quality (5%)
+
+                        **Deadline:** End of week 4
+
+                        **Bonus:** Add validation for code format (+10%)
+                    </textarea>
+                </section>
+            </section>
+
+            <!-- Summary -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Module 2 Summary
+
+                    You learned:
+
+                    ✅ Spring Boot basics and project structure
+
+                    ✅ MVC Architecture (Model-View-Controller)
+
+                    ✅ Layered architecture (Controller-Service-Repository)
+
+                    ✅ HTTP methods (GET, POST, PUT, DELETE)
+
+                    ✅ Building RESTful APIs
+
+                    ✅ Testing with Postman
+
+                    **Next Module:** Database integration with MongoDB and Frontend-Backend connection
+                </textarea>
+            </section>
+
+            <!-- Resources -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Additional Resources
+
+                    **Official Docs:**
+                    - [Spring Boot Reference](https://docs.spring.io/spring-boot/docs/current/reference/html/)
+                    - [Spring Data MongoDB](https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/)
+                    - [Postman Learning Center](https://learning.postman.com/)
+
+                    **Tutorials:**
+                    - [Baeldung Spring Boot](https://www.baeldung.com/spring-boot) - Comprehensive guides
+                    - [Spring.io Guides](https://spring.io/guides) - Official tutorials
+
+                    **Videos:**
+                    - Amigoscode (YouTube) - Spring Boot full course
+                    - Java Brains (YouTube) - Spring Boot microservices
+                </textarea>
+            </section>
+
+            <!-- Q&A -->
+            <section data-markdown>
+                <textarea data-template>
+                    ## Questions?
+
+                    📧 Email: instructor@university.edu
+
+                    💬 Office Hours: Monday & Wednesday, 2-4 PM
+
+                    📚 Lab Sessions: Friday, 1-4 PM
+
+                    ---
+
+                    **Next Session:** Module 3 - MongoDB Integration & Full Stack Connection
+                </textarea>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            transition: 'slide',
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        });
+    </script>
+</body>
+</html>
